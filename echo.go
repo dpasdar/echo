@@ -8,14 +8,14 @@ import (
 	"encoding/json"
 )
 type Answer struct {
-	status string
-	sentence string
+	Status string
+	Sentence string
 }
 func main() {
 
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Index)
-	router.HandleFunc("/answer", AnswerIndex)
+	router.HandleFunc("/answer", AnswerIndex).Methods("POST")
 	http.Handle("/", router)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 
@@ -26,6 +26,17 @@ func Index(w http.ResponseWriter, r *http.Request) {
 }
 
 func AnswerIndex(w http.ResponseWriter, r *http.Request) {
-	answer := Answer{status : "ok", sentence: "hello guys"}
-	json.NewEncoder(w).Encode(answer)
+	w.Header().Set("Content-Type", "application/json")
+	answer := Answer{"ok", "hello guys"}
+	fmt.Println(answer)
+	answerJson,err := json.Marshal(answer)
+	fmt.Println(answerJson)
+	checkErr(err)
+	w.Write(answerJson)
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
