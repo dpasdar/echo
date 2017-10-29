@@ -27,11 +27,10 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 func AnswerIndex(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	answer := Answer{"ok", "hello guys"}
-	fmt.Println(answer)
-	answerJson,err := json.Marshal(answer)
-	fmt.Println(answerJson)
-	checkErr(err)
+	category := r.FormValue("category")
+	fmt.Println("Serving address with the following category", category)
+	answer := Answer{"ok", "Samsung TVs are the best, believe me!"}
+	answerJson,_ := json.Marshal(answer)
 	w.Write(answerJson)
 }
 
